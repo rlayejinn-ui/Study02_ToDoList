@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>오늘의 할 일</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="app">
+    <!-- 헤더: 제목 + 오늘 날짜 -->
+    <header class="app-header">
+      <h1>📋 오늘의 할 일</h1>
+      <time id="today" class="today"></time>
+    </header>
+
+    <!-- 진행률 -->
+    <section id="progress" class="progress" aria-labelledby="progress-title">
+      <div class="progress-head">
+        <h2 id="progress-title">진행률</h2>
+        <p id="progress-text" class="progress-text" aria-live="polite">0 / 0 완료 (0%)</p>
+      </div>
+      <div id="progress-bar" class="progress-bar" role="progressbar"
+           aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" aria-labelledby="progress-title">
+        <div id="progress-fill" class="progress-fill"></div>
+      </div>
+      <ul id="category-progress" class="category-progress">
+        <li class="cat-work" data-category="work">업무 <strong>0/0</strong></li>
+        <li class="cat-personal" data-category="personal">개인 <strong>0/0</strong></li>
+        <li class="cat-study" data-category="study">공부 <strong>0/0</strong></li>
+      </ul>
+    </section>
+
+    <!-- 할 일 입력 -->
+    <form id="todo-form" class="todo-form" autocomplete="off">
+      <label for="category-select" class="sr-only">카테고리</label>
+      <select id="category-select" class="category-select">
+        <option value="work">업무</option>
+        <option value="personal">개인</option>
+        <option value="study">공부</option>
+      </select>
+      <label for="todo-input" class="sr-only">할 일</label>
+      <input id="todo-input" class="todo-input" type="text"
+             placeholder="할 일을 입력하세요..." maxlength="100" required>
+      <button type="submit" class="btn btn-primary">추가</button>
+    </form>
+
+    <!-- 카테고리 필터 -->
+    <nav id="filters" class="filters" aria-label="카테고리 필터">
+      <button type="button" class="filter-btn is-active" data-filter="all" aria-pressed="true">전체 <span class="count">0</span></button>
+      <button type="button" class="filter-btn" data-filter="work" aria-pressed="false">업무 <span class="count">0</span></button>
+      <button type="button" class="filter-btn" data-filter="personal" aria-pressed="false">개인 <span class="count">0</span></button>
+      <button type="button" class="filter-btn" data-filter="study" aria-pressed="false">공부 <span class="count">0</span></button>
+    </nav>
+
+    <!-- 할 일 목록 (app.js가 렌더링) -->
+    <ul id="todo-list" class="todo-list"></ul>
+
+    <!-- 빈 상태 안내 (목록이 비었을 때 JS가 hidden 해제) -->
+    <p id="empty-state" class="empty-state" hidden>할 일을 추가해 보세요 ✨</p>
+
+    <!-- 하단: 완료 항목 일괄 삭제 -->
+    <footer class="app-footer">
+      <button type="button" id="clear-completed" class="btn btn-ghost" disabled>완료 항목 삭제</button>
+    </footer>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
