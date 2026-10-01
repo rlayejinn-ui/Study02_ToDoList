@@ -7,63 +7,91 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <main class="app">
+  <div class="page">
     <!-- 헤더: 제목 + 오늘 날짜 -->
     <header class="app-header">
       <h1>📋 오늘의 할 일</h1>
       <time id="today" class="today"></time>
     </header>
 
-    <!-- 진행률 -->
-    <section id="progress" class="progress" aria-labelledby="progress-title">
-      <div class="progress-head">
-        <h2 id="progress-title">진행률</h2>
-        <p id="progress-text" class="progress-text" aria-live="polite">0 / 0 완료 (0%)</p>
-      </div>
-      <div id="progress-bar" class="progress-bar" role="progressbar"
-           aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" aria-labelledby="progress-title">
-        <div id="progress-fill" class="progress-fill"></div>
-      </div>
-      <ul id="category-progress" class="category-progress">
-        <li class="cat-work" data-category="work">업무 <strong>0/0</strong></li>
-        <li class="cat-personal" data-category="personal">개인 <strong>0/0</strong></li>
-        <li class="cat-study" data-category="study">공부 <strong>0/0</strong></li>
-      </ul>
-    </section>
+    <div class="layout">
+      <!-- 왼쪽: 진행률 + 카테고리 메뉴 -->
+      <aside class="sidebar">
+        <section id="progress" class="card progress" aria-labelledby="progress-title">
+          <h2 id="progress-title" class="card-title">진행률</h2>
+          <div class="progress-summary">
+            <span id="progress-percent" class="progress-percent">0%</span>
+            <p id="progress-text" class="progress-text" aria-live="polite">0 / 0 완료</p>
+          </div>
+          <div id="progress-bar" class="progress-bar" role="progressbar"
+               aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" aria-labelledby="progress-title">
+            <div id="progress-fill" class="progress-fill"></div>
+          </div>
+          <ul id="category-progress" class="category-progress">
+            <li class="cat-row cat-work" data-category="work">
+              <div class="cat-row-head"><span class="cat-name">업무</span><strong>0/0</strong></div>
+              <div class="mini-bar"><div class="mini-fill"></div></div>
+            </li>
+            <li class="cat-row cat-personal" data-category="personal">
+              <div class="cat-row-head"><span class="cat-name">개인</span><strong>0/0</strong></div>
+              <div class="mini-bar"><div class="mini-fill"></div></div>
+            </li>
+            <li class="cat-row cat-study" data-category="study">
+              <div class="cat-row-head"><span class="cat-name">공부</span><strong>0/0</strong></div>
+              <div class="mini-bar"><div class="mini-fill"></div></div>
+            </li>
+          </ul>
+        </section>
 
-    <!-- 할 일 입력 -->
-    <form id="todo-form" class="todo-form" autocomplete="off">
-      <label for="category-select" class="sr-only">카테고리</label>
-      <select id="category-select" class="category-select">
-        <option value="work">업무</option>
-        <option value="personal">개인</option>
-        <option value="study">공부</option>
-      </select>
-      <label for="todo-input" class="sr-only">할 일</label>
-      <input id="todo-input" class="todo-input" type="text"
-             placeholder="할 일을 입력하세요..." maxlength="100" required>
-      <button type="submit" class="btn btn-primary">추가</button>
-    </form>
+        <nav id="filters" class="card filters" aria-label="카테고리 필터">
+          <h2 class="card-title">카테고리</h2>
+          <button type="button" class="filter-btn is-active" data-filter="all" aria-pressed="true">
+            <span class="dot dot-all"></span><span class="filter-label">전체</span><span class="count">0</span>
+          </button>
+          <button type="button" class="filter-btn" data-filter="work" aria-pressed="false">
+            <span class="dot dot-work"></span><span class="filter-label">업무</span><span class="count">0</span>
+          </button>
+          <button type="button" class="filter-btn" data-filter="personal" aria-pressed="false">
+            <span class="dot dot-personal"></span><span class="filter-label">개인</span><span class="count">0</span>
+          </button>
+          <button type="button" class="filter-btn" data-filter="study" aria-pressed="false">
+            <span class="dot dot-study"></span><span class="filter-label">공부</span><span class="count">0</span>
+          </button>
+        </nav>
+      </aside>
 
-    <!-- 카테고리 필터 -->
-    <nav id="filters" class="filters" aria-label="카테고리 필터">
-      <button type="button" class="filter-btn is-active" data-filter="all" aria-pressed="true">전체 <span class="count">0</span></button>
-      <button type="button" class="filter-btn" data-filter="work" aria-pressed="false">업무 <span class="count">0</span></button>
-      <button type="button" class="filter-btn" data-filter="personal" aria-pressed="false">개인 <span class="count">0</span></button>
-      <button type="button" class="filter-btn" data-filter="study" aria-pressed="false">공부 <span class="count">0</span></button>
-    </nav>
+      <!-- 오른쪽: 입력 + 목록 -->
+      <main class="main">
+        <form id="todo-form" class="card todo-form" autocomplete="off">
+          <label for="category-select" class="sr-only">카테고리</label>
+          <select id="category-select" class="category-select">
+            <option value="work">업무</option>
+            <option value="personal">개인</option>
+            <option value="study">공부</option>
+          </select>
+          <label for="todo-input" class="sr-only">할 일</label>
+          <input id="todo-input" class="todo-input" type="text"
+                 placeholder="할 일을 입력하고 Enter를 누르세요" maxlength="100" required>
+          <button type="submit" class="btn btn-primary">추가</button>
+        </form>
 
-    <!-- 할 일 목록 (app.js가 렌더링) -->
-    <ul id="todo-list" class="todo-list"></ul>
+        <div class="list-header">
+          <h2 id="list-title" class="list-title">전체 할 일</h2>
+          <button type="button" id="clear-completed" class="btn btn-ghost" disabled>완료 항목 삭제</button>
+        </div>
 
-    <!-- 빈 상태 안내 (목록이 비었을 때 JS가 hidden 해제) -->
-    <p id="empty-state" class="empty-state" hidden>할 일을 추가해 보세요 ✨</p>
+        <!-- 할 일 목록 (app.js가 렌더링) -->
+        <ul id="todo-list" class="todo-list"></ul>
 
-    <!-- 하단: 완료 항목 일괄 삭제 -->
+        <!-- 빈 상태 안내 (목록이 비었을 때 JS가 hidden 해제) -->
+        <p id="empty-state" class="empty-state" hidden>할 일을 추가해 보세요 ✨</p>
+      </main>
+    </div>
+
     <footer class="app-footer">
-      <button type="button" id="clear-completed" class="btn btn-ghost" disabled>완료 항목 삭제</button>
+      <a class="version-link" href="mobile_version/">📱 모바일 버전으로 보기</a>
     </footer>
-  </main>
+  </div>
 
   <script src="app.js"></script>
 </body>

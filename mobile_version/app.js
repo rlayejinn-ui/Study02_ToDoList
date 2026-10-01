@@ -28,12 +28,10 @@ const emptyStateEl = document.getElementById('empty-state');
 const filtersEl = document.getElementById('filters');
 const progressEl = document.getElementById('progress');
 const progressTextEl = document.getElementById('progress-text');
-const progressPercentEl = document.getElementById('progress-percent');
 const progressBarEl = document.getElementById('progress-bar');
 const progressFillEl = document.getElementById('progress-fill');
 const categoryProgressEl = document.getElementById('category-progress');
 const clearCompletedEl = document.getElementById('clear-completed');
-const listTitleEl = document.getElementById('list-title');
 
 // ===== 저장소 (localStorage) =====
 function isValidTodo(item) {
@@ -323,7 +321,6 @@ function render() {
   );
   listEl.replaceChildren(...items);
   renderEmptyState(visible.length);
-  renderListTitle();
   renderFilters();
   renderProgress();
   renderClearCompleted();
@@ -357,8 +354,9 @@ function renderProgress() {
   const { done, total, percent } = getProgress(todos);
   const isAllDone = total > 0 && done === total;
 
-  progressPercentEl.textContent = `${percent}%`;
-  progressTextEl.textContent = isAllDone ? `🎉 모두 완료! ${done} / ${total}` : `${done} / ${total} 완료`;
+  progressTextEl.textContent = isAllDone
+    ? `🎉 모두 완료! ${done} / ${total} (100%)`
+    : `${done} / ${total} 완료 (${percent}%)`;
   progressFillEl.style.width = `${percent}%`;
   progressBarEl.setAttribute('aria-valuenow', String(percent));
   progressBarEl.setAttribute('aria-valuetext', `${total}개 중 ${done}개 완료, ${percent}%`);
@@ -366,14 +364,9 @@ function renderProgress() {
 
   for (const category of Object.keys(CATEGORIES)) {
     const stats = getProgress(todos.filter((todo) => todo.category === category));
-    const row = categoryProgressEl.querySelector(`[data-category="${category}"]`);
-    row.querySelector('strong').textContent = `${stats.done}/${stats.total}`;
-    row.querySelector('.mini-fill').style.width = `${stats.percent}%`;
+    categoryProgressEl.querySelector(`[data-category="${category}"] strong`).textContent =
+      `${stats.done}/${stats.total}`;
   }
-}
-
-function renderListTitle() {
-  listTitleEl.textContent = currentFilter === 'all' ? '전체 할 일' : `${CATEGORIES[currentFilter]} 할 일`;
 }
 
 function renderFilters() {

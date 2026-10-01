@@ -7,6 +7,7 @@
   --border: #e5e7eb;
   --primary: #4f46e5;
   --primary-hover: #4338ca;
+  --primary-soft: #eef2ff;
   --danger: #dc2626;
   --success: #16a34a;
 
@@ -17,8 +18,9 @@
   --study: #f97316;
   --study-bg: #ffedd5;
 
-  --radius: 10px;
+  --radius: 12px;
   --shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  --sidebar-width: 320px;
 }
 
 /* ===== 기본 ===== */
@@ -59,14 +61,48 @@ select {
   outline-offset: 2px;
 }
 
-/* ===== 레이아웃 ===== */
-.app {
-  max-width: 600px;
+/* ===== 페이지 레이아웃 (데스크톱 2단) ===== */
+.page {
+  max-width: 1200px;
   margin: 0 auto;
-  padding: 32px 16px 48px;
+  padding: 32px 40px 56px;
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: var(--sidebar-width) minmax(0, 1fr);
+  gap: 32px;
+  align-items: start;
+}
+
+.sidebar {
+  position: sticky;
+  top: 24px;
   display: flex;
   flex-direction: column;
   gap: 16px;
+}
+
+.main {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  min-width: 0;
+}
+
+.card {
+  background: var(--surface);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 20px;
+}
+
+.card-title {
+  margin: 0 0 12px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  letter-spacing: 0.02em;
 }
 
 /* ===== 헤더 ===== */
@@ -76,42 +112,40 @@ select {
   align-items: baseline;
   flex-wrap: wrap;
   gap: 8px;
+  margin-bottom: 24px;
 }
 
 .app-header h1 {
   margin: 0;
-  font-size: 1.6rem;
+  font-size: 1.8rem;
 }
 
 .today {
   color: var(--text-muted);
-  font-size: 0.95rem;
+  font-size: 1rem;
 }
 
 /* ===== 진행률 ===== */
-.progress {
-  background: var(--surface);
-  border-radius: var(--radius);
-  box-shadow: var(--shadow);
-  padding: 16px;
-}
-
-.progress-head {
+.progress-summary {
   display: flex;
-  justify-content: space-between;
   align-items: baseline;
-  margin-bottom: 8px;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 10px;
 }
 
-.progress-head h2 {
-  margin: 0;
-  font-size: 1rem;
+.progress-percent {
+  font-size: 2.6rem;
+  font-weight: 700;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
 }
 
 .progress-text {
   margin: 0;
   color: var(--text-muted);
   font-size: 0.9rem;
+  text-align: right;
 }
 
 .progress-bar {
@@ -134,52 +168,161 @@ select {
   background: var(--success);
 }
 
+.progress.is-complete .progress-percent,
 .progress.is-complete .progress-text {
   color: var(--success);
   font-weight: 600;
 }
 
+/* 카테고리별 진행률 */
 .category-progress {
   list-style: none;
-  margin: 12px 0 0;
-  padding: 0;
+  margin: 20px 0 0;
+  padding: 16px 0 0;
+  border-top: 1px solid var(--border);
   display: flex;
-  gap: 16px;
-  flex-wrap: wrap;
-  font-size: 0.85rem;
-  color: var(--text-muted);
+  flex-direction: column;
+  gap: 12px;
+  font-size: 0.875rem;
 }
 
-.category-progress li::before {
+.cat-row-head {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 4px;
+}
+
+.cat-name::before {
   content: "";
   display: inline-block;
   width: 8px;
   height: 8px;
-  margin-right: 6px;
+  margin-right: 8px;
   border-radius: 50%;
   vertical-align: middle;
 }
 
-.category-progress .cat-work::before { background: var(--work); }
-.category-progress .cat-personal::before { background: var(--personal); }
-.category-progress .cat-study::before { background: var(--study); }
-
-.category-progress strong {
-  color: var(--text);
+.cat-row-head strong {
   font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.mini-bar {
+  height: 6px;
+  background: var(--border);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.mini-fill {
+  height: 100%;
+  width: 0;
+  border-radius: inherit;
+  transition: width 0.3s ease;
+}
+
+.cat-work .cat-name::before,
+.cat-work .mini-fill { background: var(--work); }
+.cat-personal .cat-name::before,
+.cat-personal .mini-fill { background: var(--personal); }
+.cat-study .cat-name::before,
+.cat-study .mini-fill { background: var(--study); }
+
+/* ===== 카테고리 메뉴 (필터) ===== */
+.filters {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 20px 12px;
+}
+
+.filters .card-title {
+  padding: 0 8px;
+}
+
+.filter-btn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 10px 12px;
+  border: none;
+  border-radius: 8px;
+  background: transparent;
+  text-align: left;
+  cursor: pointer;
+}
+
+.filter-btn:hover {
+  background: var(--bg);
+}
+
+.filter-btn.is-active {
+  background: var(--primary-soft);
+  color: var(--primary);
+  font-weight: 600;
+}
+
+.filter-label {
+  flex: 1;
+}
+
+.filter-btn .count {
+  min-width: 28px;
+  padding: 0 8px;
+  border-radius: 999px;
+  background: var(--bg);
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+
+.filter-btn.is-active .count {
+  background: var(--primary);
+  color: #fff;
+}
+
+.dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.dot-all { background: var(--text-muted); }
+.dot-work { background: var(--work); }
+.dot-personal { background: var(--personal); }
+.dot-study { background: var(--study); }
+
+.app-footer {
+  margin-top: 40px;
+  text-align: center;
+}
+
+.version-link {
+  color: var(--text-muted);
+  font-size: 0.875rem;
+  text-decoration: none;
+}
+
+.version-link:hover {
+  color: var(--primary);
+  text-decoration: underline;
 }
 
 /* ===== 입력 폼 ===== */
 .todo-form {
   display: flex;
-  gap: 8px;
+  gap: 10px;
+  padding: 16px;
 }
 
 .category-select,
 .todo-input,
 .edit-input {
-  height: 42px;
-  padding: 0 12px;
+  height: 46px;
+  padding: 0 14px;
   border: 1px solid var(--border);
   border-radius: 8px;
   background: var(--surface);
@@ -198,8 +341,8 @@ select {
 
 /* ===== 버튼 ===== */
 .btn {
-  height: 42px;
-  padding: 0 16px;
+  height: 46px;
+  padding: 0 22px;
   border: 1px solid var(--border);
   border-radius: 8px;
   background: var(--surface);
@@ -223,15 +366,18 @@ select {
 }
 
 .btn-sm {
-  height: 34px;
-  padding: 0 12px;
+  height: 36px;
+  padding: 0 14px;
   font-size: 0.875rem;
 }
 
 .btn-ghost {
+  height: 36px;
+  padding: 0 12px;
   border-color: transparent;
   background: transparent;
   color: var(--text-muted);
+  font-size: 0.9rem;
 }
 
 .btn-ghost:hover:not(:disabled) {
@@ -245,8 +391,8 @@ select {
 }
 
 .icon-btn {
-  width: 34px;
-  height: 34px;
+  width: 36px;
+  height: 36px;
   border: none;
   border-radius: 6px;
   background: transparent;
@@ -257,35 +403,18 @@ select {
   background: var(--bg);
 }
 
-/* ===== 필터 탭 ===== */
-.filters {
+/* ===== 목록 헤더 ===== */
+.list-header {
   display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 8px;
+  padding: 0 4px;
 }
 
-.filter-btn {
-  padding: 6px 14px;
-  border: 1px solid var(--border);
-  border-radius: 999px;
-  background: var(--surface);
-  cursor: pointer;
-  font-size: 0.9rem;
-}
-
-.filter-btn:hover {
-  border-color: var(--primary);
-}
-
-.filter-btn.is-active {
-  background: var(--text);
-  border-color: var(--text);
-  color: #fff;
-}
-
-.filter-btn .count {
-  margin-left: 2px;
-  opacity: 0.7;
+.list-title {
+  margin: 0;
+  font-size: 1.15rem;
 }
 
 /* ===== 할 일 목록 ===== */
@@ -301,12 +430,17 @@ select {
 .todo-item {
   display: flex;
   align-items: center;
-  gap: 10px;
-  min-height: 54px;
-  padding: 8px 8px 8px 14px;
+  gap: 12px;
+  min-height: 58px;
+  padding: 10px 12px 10px 18px;
   background: var(--surface);
   border-radius: var(--radius);
   box-shadow: var(--shadow);
+  transition: box-shadow 0.15s ease;
+}
+
+.todo-item:hover {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 .todo-check {
@@ -330,6 +464,19 @@ select {
   flex-shrink: 0;
 }
 
+/* 마우스가 있는 환경: 수정/삭제 버튼은 항목에 올리거나 포커스했을 때 또렷하게 */
+@media (hover: hover) {
+  .todo-item:not(.is-editing) .todo-actions {
+    opacity: 0.35;
+    transition: opacity 0.15s ease;
+  }
+
+  .todo-item:hover .todo-actions,
+  .todo-item:focus-within .todo-actions {
+    opacity: 1;
+  }
+}
+
 /* 완료 상태 */
 .todo-item.is-completed .todo-text {
   text-decoration: line-through;
@@ -347,15 +494,15 @@ select {
 
 .todo-item.is-editing .category-select,
 .todo-item.is-editing .edit-input {
-  height: 34px;
+  height: 38px;
 }
 
 /* ===== 카테고리 배지 ===== */
 .badge {
   flex-shrink: 0;
-  padding: 2px 8px;
+  padding: 2px 10px;
   border-radius: 6px;
-  font-size: 0.75rem;
+  font-size: 0.8rem;
   font-weight: 600;
 }
 
@@ -363,10 +510,10 @@ select {
 .badge-personal { background: var(--personal-bg); color: #15803d; }
 .badge-study { background: var(--study-bg); color: #c2410c; }
 
-/* ===== 빈 상태 / 푸터 ===== */
+/* ===== 빈 상태 ===== */
 .empty-state {
   margin: 0;
-  padding: 40px 16px;
+  padding: 64px 16px;
   text-align: center;
   color: var(--text-muted);
   background: var(--surface);
@@ -374,19 +521,75 @@ select {
   border-radius: var(--radius);
 }
 
-.app-footer {
-  display: flex;
-  justify-content: flex-end;
+/* ===== 태블릿 이하: 1단으로 전환 ===== */
+@media (max-width: 960px) {
+  .page {
+    max-width: 640px;
+    padding: 24px 16px 48px;
+  }
+
+  .layout {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 16px;
+  }
+
+  .sidebar {
+    position: static;
+  }
+
+  /* 카테고리 메뉴는 가로 탭으로 */
+  .filters {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 0;
+    background: transparent;
+    box-shadow: none;
+  }
+
+  .filters .card-title {
+    display: none;
+  }
+
+  .filter-btn {
+    width: auto;
+    padding: 6px 12px;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    background: var(--surface);
+  }
+
+  .filter-btn .dot {
+    display: none;
+  }
+
+  .filter-btn .count {
+    min-width: 0;
+    padding: 0;
+    background: transparent;
+  }
+
+  .filter-btn.is-active {
+    background: var(--text);
+    border-color: var(--text);
+    color: #fff;
+  }
+
+  .filter-btn.is-active .count {
+    background: transparent;
+    color: #fff;
+    opacity: 0.8;
+  }
 }
 
 /* ===== 모바일 ===== */
 @media (max-width: 480px) {
-  .app {
-    padding-top: 20px;
-  }
-
   .app-header h1 {
     font-size: 1.35rem;
+  }
+
+  .progress-percent {
+    font-size: 2rem;
   }
 
   .todo-form {
