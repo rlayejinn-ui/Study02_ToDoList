@@ -379,6 +379,19 @@ select {
   justify-content: flex-end;
 }
 
+.version-link {
+  align-self: center;
+  margin-top: 16px;
+  color: var(--text-muted);
+  font-size: 0.875rem;
+  text-decoration: none;
+}
+
+.version-link:hover {
+  color: var(--primary);
+  text-decoration: underline;
+}
+
 /* ===== 모바일 ===== */
 @media (max-width: 480px) {
   .app {
