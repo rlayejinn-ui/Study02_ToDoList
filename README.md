@@ -3,6 +3,8 @@
 매일 10~20개의 할 일을 관리하는 **개인용 할 일 관리 웹 앱** 프로젝트입니다.
 설치나 로그인 없이 브라우저에서 바로 실행되고, 새로고침해도 데이터가 유지되는 것을 목표로 합니다.
 
+🔗 **바로 사용하기: https://rlayejinn-ui.github.io/Study02_ToDoList/**
+
 > 요구사항 전체는 [PRD.md](PRD.md)를 참고하세요.
 
 ## 주요 기능
@@ -34,7 +36,10 @@ Study02_ToDoList/
 
 ## 실행 방법
 
-`index.html` 파일을 브라우저에서 열면 바로 실행됩니다. (별도 설치 불필요)
+- **온라인**: https://rlayejinn-ui.github.io/Study02_ToDoList/ 에 접속 (GitHub Pages)
+- **로컬**: 저장소를 내려받아 `index.html` 파일을 브라우저에서 열기 (별도 설치 불필요)
+
+> 할 일 데이터는 각 브라우저의 `localStorage`에 저장되므로, 기기·브라우저마다 목록이 따로 관리됩니다.
 
 ## 문서
 
